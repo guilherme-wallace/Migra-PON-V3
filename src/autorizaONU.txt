@@ -16,7 +16,7 @@ interface gpon 0/1
 
 ont add 4 1 sn-auth "48575443897A1111" omci ont-lineprofile-id 1921 ont-srvprofile-id 1921 desc "MIGRA-PON-TESTE"
 
-ont port native-vlan 4 1 eth 1 vlan 1921 priority 0
+ont port native-vlan 4 1 edth 1 vlan 1921 priority 0
 
 quit
 
