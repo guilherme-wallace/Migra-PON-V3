@@ -1,0 +1,117 @@
+[
+    {
+        "ont_id": "0",
+        "sn_auth": "48575443897A0000",
+        "lineprofile_id": "1904",
+        "srvprofile_id": "1904",
+        "desc": "MIGRA-PON-TESTE",
+        "native_vlans": [
+            {
+                "vlan": "1904"
+            }
+        ],
+        "service_ports": [
+            {
+                "service_port_id": "35753",
+                "vlan": "1904",
+                "gemport": "126",
+                "user_vlan": "1904"
+            }
+        ]
+    },
+    {
+        "ont_id": "1",
+        "sn_auth": "48575443897A1111",
+        "lineprofile_id": "1904",
+        "srvprofile_id": "1904",
+        "desc": "MIGRA-PON-TESTE",
+        "native_vlans": [
+            {
+                "vlan": "1904"
+            }
+        ],
+        "service_ports": [
+            {
+                "service_port_id": "35754",
+                "vlan": "1904",
+                "gemport": "126",
+                "user_vlan": "1904"
+            }
+        ]
+    },
+    {
+        "ont_id": "2",
+        "sn_auth": "48575443897A2222",
+        "lineprofile_id": "1904",
+        "srvprofile_id": "1904",
+        "desc": "MIGRA-PON-TESTE",
+        "native_vlans": [
+            {
+                "vlan": "1904"
+            }
+        ],
+        "service_ports": [
+            {
+                "service_port_id": "35755",
+                "vlan": "1921",
+                "gemport": "126",
+                "user_vlan": "1904"
+            }
+        ]
+    },
+    {
+        "ont_id": "3",
+        "sn_auth": "48575443897A3333",
+        "lineprofile_id": "1904",
+        "srvprofile_id": "1904",
+        "desc": "CORP-MIGRA-PON-TESTE",
+        "native_vlans": [
+            {
+                "vlan": "1904"
+            },
+            {
+                "vlan": "1904"
+            },
+            {
+                "vlan": "1904"
+            },
+            {
+                "vlan": "1904"
+            }
+        ],
+        "service_ports": [
+            {
+                "service_port_id": "35788",
+                "vlan": "1904",
+                "gemport": "126",
+                "user_vlan": "1904"
+            },
+            {
+                "service_port_id": "35789",
+                "vlan": "1900",
+                "gemport": "126",
+                "user_vlan": "1900"
+            }
+        ]
+    },
+    {
+        "ont_id": "4",
+        "sn_auth": "48575443897A4444",
+        "lineprofile_id": "1904",
+        "srvprofile_id": "1904",
+        "desc": "RDNT-MIGRA-PON-TESTE",
+        "native_vlans": [
+            {
+                "vlan": "1904"
+            }
+        ],
+        "service_ports": [
+            {
+                "service_port_id": "35790",
+                "vlan": "1921",
+                "gemport": "126",
+                "user_vlan": "1904"
+            }
+        ]
+    }
+]
