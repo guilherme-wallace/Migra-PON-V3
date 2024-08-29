@@ -31,7 +31,7 @@ pon_ANTIGA = "0/16/5"
 use_OLT_Nova = "OLT-SEA01"
 
 # Verifique as configurações da ONU
-onu_ID = 33
+onu_ID = 0
 ont_LIN_PROF = None
 ont_SRV_PROF = None
 ont_native_vlan = None

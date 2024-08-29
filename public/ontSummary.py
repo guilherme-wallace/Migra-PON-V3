@@ -66,19 +66,18 @@ def ssh_connect_and_execute_summary(hostnameOLTAntiga, username, password, autof
             processed_fsp.add(f_s_p)
 
             # Extrair as informações de interesse usando regex
-            ont_info = re.findall(
-                r'(\d+)\s+(\w+)\s+([\w-]+)\s+(-?\d+\.?\d*/-?\d+\.?\d*)\s+(.*)',
-                full_currentPort
-            )
+            ont_info = re.findall(r'^\s*\d+\s+[A-F0-9]+\s+\S+\s+.*$', full_currentPort, re.MULTILINE)
 
             for info in ont_info:
+                info_parts = re.split(r'\s+', info.strip(), maxsplit=5)
                 ont_summary_data.append({
                     "F/S/P": f_s_p,
-                    "ONT ID": info[0],
-                    "SN": info[1],
-                    "Type": info[2],
-                    "Rx/Tx power": info[3],
-                    "Description": info[4]
+                    "ONT ID": info_parts[0],
+                    "SN": info_parts[1],
+                    "Type": info_parts[2],
+                    "Distance": info_parts[3],
+                    "Rx/Tx power": info_parts[4],
+                    "Description": info_parts[5]
                 })
 
         # Diretório de saída
@@ -104,3 +103,4 @@ def ssh_connect_and_execute_summary(hostnameOLTAntiga, username, password, autof
 
 autofind_onus_file = 'src/autofind_onus.json'
 onus_config_file = 'src/onus_config.json'
+

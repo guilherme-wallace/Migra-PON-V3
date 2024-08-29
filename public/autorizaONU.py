@@ -10,10 +10,16 @@ def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUE
         with open(autofind_onus_path, 'r') as file:
             autofind_onus = json.load(file)
         
+        with open('src/ontSummary.json', 'r') as file:
+            ont_summary = json.load(file)
+        
+        # Obter lista de IDs de ONUs já em uso na PON nova
+        used_ont_ids = {int(onu["ONT ID"]) for onu in ont_summary}
+
         # Listas para armazenar comandos de autorização
         authorization_commands = ["enable", "", "config", ""]
         exception_commands = ["enable", "", "config", ""]
-        delete_commands = ["enable", "", "config", ""]
+        delete_commands = ["enable", "", "config"]
         
         # Iterar sobre as ONUs no arquivo de configuração
         for onu in onus:
@@ -31,12 +37,22 @@ def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUE
             interfaceGPON_nova = "/".join(pon_nova.split("/")[0:2])
             gPON_nova = "/".join(pon_nova.split("/")[2:3])
 
-            # Definir o ID atual da ONU e incrementar o start_id
+            # Encontrar o próximo ID de ONU disponível
+            while start_id in used_ont_ids:
+                start_id += 1
             ont_id = start_id
             start_id += 1
+            used_ont_ids.add(ont_id)
             
             # Verificação das palavras-chave na descrição
-            if any(keyword in onu["desc"] for keyword in ["RDNT", "CORP", "ITX"]):
+            if "RDNT" in onu["desc"]:
+                print(f"A ONU com ID: {onu['ont_id']} descrição: {onu['desc']} é rede neutra, então suas configuração não foram modificadas.")
+                modified_lineprofile_id = onu["lineprofile_id"]
+                modified_srvprofile_id = onu["srvprofile_id"]
+                modified_native_vlan = onu["native_vlans"]
+                modified_service_ports = onu["service_ports"]
+                save_path = authorization_commands
+            elif any(keyword in onu["desc"] for keyword in ["CORP", "ITX"]):
                 print(f"A ONU com ID: {onu['ont_id']} será salva em {autorizaONUExcecoo_path} devido à descrição: {onu['desc']}")
                 modified_lineprofile_id = onu["lineprofile_id"]
                 modified_srvprofile_id = onu["srvprofile_id"]
@@ -70,7 +86,7 @@ def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUE
             # Adicionando comandos para service-ports
             for sp_info in modified_service_ports:
                 commands.append(
-                    f'service-port vlan {sp_info["vlan"]} gpon {pon_nova} ont {ont_id} gemport {sp_info["gemport"]} multi-service user-vlan {sp_info["user_vlan"]} tag-transform translate'
+                    f'\nservice-port vlan {sp_info["vlan"]} gpon {pon_nova} ont {ont_id} gemport {sp_info["gemport"]} multi-service user-vlan {sp_info["user_vlan"]} tag-transform translate'
                 )
 
             # Adicionando comandos à lista correspondente (normal ou exceção)
@@ -80,13 +96,14 @@ def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUE
 
             # Gerando comandos para deletar a ONU e adicionar ao arquivo ontDelete.txt
             delete_commands.extend([
-                f"undo service-port {sp_info['service_port_id']}" for sp_info in modified_service_ports
+                f"\nundo service-port {sp_info['service_port_id']}" for sp_info in modified_service_ports
             ])
             delete_commands.append("")  # Linha em branco após cada comando
             delete_commands.append(f"interface gpon {interfaceGPON_antiga}")
             delete_commands.append("")  # Linha em branco após cada comando
             delete_commands.append(f"ont delete {gPON_antiga} {onu['ont_id']}")
             delete_commands.append("")  # Linha em branco após cada comando
+            delete_commands.append(f"quit")
 
         # Salvando os comandos no arquivo principal
         if authorization_commands:
@@ -113,5 +130,3 @@ autorizaONU_path = 'src/autorizaONU.txt'
 autorizaONUExcecoo_path = 'src/autorizaONUExcecoo.txt'
 json_path = 'src/onus_config.json'
 autofind_onus_path = 'src/autofind_onus.json'
-
-
