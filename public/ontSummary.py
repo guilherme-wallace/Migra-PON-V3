@@ -23,13 +23,14 @@ def ssh_connect_and_execute_summary(hostnameOLTAntiga, username, password, autof
         ssh_shell = client.invoke_shell()
 
         ont_summary_data = []
+        processed_fsp = set()  # Conjunto para rastrear os F/S/P já processados
 
         for onu in autofind_onus:
             f_s_p = onu['F/S/P']
             sn = onu['Ont SN']
 
-            if sn not in authorized_sns:
-                continue
+            if sn not in authorized_sns or f_s_p in processed_fsp:
+                continue  # Pula se SN não autorizado ou F/S/P já processado
 
             commands_summary = [
                 "enable",
@@ -60,6 +61,9 @@ def ssh_connect_and_execute_summary(hostnameOLTAntiga, username, password, autof
                     loops += 1
 
                 full_currentPort += output
+
+            # Marcar o F/S/P como processado
+            processed_fsp.add(f_s_p)
 
             # Extrair as informações de interesse usando regex
             ont_info = re.findall(
@@ -98,6 +102,5 @@ def ssh_connect_and_execute_summary(hostnameOLTAntiga, username, password, autof
     finally:
         client.close()
 
-autofind_onus_file='src/autofind_onus.json'
-onus_config_file='src/onus_config.json'
-
+autofind_onus_file = 'src/autofind_onus.json'
+onus_config_file = 'src/onus_config.json'

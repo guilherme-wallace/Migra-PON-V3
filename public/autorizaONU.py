@@ -85,7 +85,7 @@ def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUE
             delete_commands.append("")  # Linha em branco após cada comando
             delete_commands.append(f"interface gpon {interfaceGPON_antiga}")
             delete_commands.append("")  # Linha em branco após cada comando
-            delete_commands.append(f"ont delete {gPON_antiga} {ont_id}")
+            delete_commands.append(f"ont delete {gPON_antiga} {onu['ont_id']}")
             delete_commands.append("")  # Linha em branco após cada comando
 
         # Salvando os comandos no arquivo principal
@@ -113,3 +113,5 @@ autorizaONU_path = 'src/autorizaONU.txt'
 autorizaONUExcecoo_path = 'src/autorizaONUExcecoo.txt'
 json_path = 'src/onus_config.json'
 autofind_onus_path = 'src/autofind_onus.json'
+
+
