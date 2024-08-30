@@ -9,6 +9,7 @@ from public.jsonONUs import *
 from public.autorizaONU import *
 from public.autofind import *
 from public.ontSummary import *
+from public.autorizaOLT import *
 
 # Mapeamento das OLTs e seus IPs
 olt_IPS = {
@@ -48,8 +49,6 @@ username = user
 password = user_password
 
 def main():    
-    #PEGA O CONFIGURAÇÕES DA PORTA------------------------------------------------------------------------------------------------------------
-
     # Executa a função PEGA O CURRENTPORT
     ssh_connect_and_execute_currentPort(hostnameOLTAntiga, username, password, pon_ANTIGA)
 
@@ -63,7 +62,10 @@ def main():
     ssh_connect_and_execute_summary(hostnameOLTNova, username, password, autofind_onus_file, onus_config_file)
 
     # Executando a função para criar os comando de autorizar ONUs    
-    authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUExcecoo_path, pon_ANTIGA, start_id=onu_ID, lineprofile_id=ont_LIN_PROF, srvprofile_id=ont_SRV_PROF,
+    authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUExcecao_path, pon_ANTIGA, start_id=onu_ID, lineprofile_id=ont_LIN_PROF, srvprofile_id=ont_SRV_PROF,
                    native_vlan=ont_native_vlan, service_port_id=None, vlan=ont_vlan_service_port, gemport=ont_gem_PORT, user_vlan=ont_user_vlan)
+    
+    # Executando a função que acessa as OLTs e autoriza as ONUs com novos dados.
+    execute_olt_commands_autorizaOLT(hostnameOLTAntiga, hostnameOLTNova, username, password)
 
 main()

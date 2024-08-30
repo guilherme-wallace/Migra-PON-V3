@@ -1,6 +1,6 @@
 import json
 
-def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUExcecoo_path, ont_pon_ANTIGA, start_id=0, lineprofile_id=None, srvprofile_id=None,
+def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUExcecao_path, ont_pon_ANTIGA, start_id=0, lineprofile_id=None, srvprofile_id=None,
                    native_vlan=None, service_port_id=None, vlan=None, gemport=None, user_vlan=None):    
     try:
         # Leitura do arquivo JSON com as ONUs e do arquivo autofind
@@ -20,7 +20,8 @@ def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUE
         authorization_commands = ["enable", "", "config", ""]
         exception_commands = ["enable", "", "config", ""]
         delete_commands = ["enable", "", "config"]
-        
+        delete_Excecao_commands = ["enable", "", "config"]
+
         # Iterar sobre as ONUs no arquivo de configuração
         for onu in onus:
             # Verificar se a ONU está no arquivo autofind
@@ -52,13 +53,15 @@ def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUE
                 modified_native_vlan = onu["native_vlans"]
                 modified_service_ports = onu["service_ports"]
                 save_path = authorization_commands
-            elif any(keyword in onu["desc"] for keyword in ["CORP", "ITX"]):
-                print(f"A ONU com ID: {onu['ont_id']} será salva em {autorizaONUExcecoo_path} devido à descrição: {onu['desc']}")
+                delete_path = delete_commands
+            elif any(keyword in onu["desc"] for keyword in ["CORP", "ITX", "WIFI", "EVNT"]):
+                print(f"A ONU com ID: {onu['ont_id']} será salva em {autorizaONUExcecao_path} devido à descrição: {onu['desc']}")
                 modified_lineprofile_id = onu["lineprofile_id"]
                 modified_srvprofile_id = onu["srvprofile_id"]
                 modified_native_vlan = onu["native_vlans"]
                 modified_service_ports = onu["service_ports"]
                 save_path = exception_commands
+                delete_path = delete_Excecao_commands
             else:
                 modified_lineprofile_id = lineprofile_id or onu["lineprofile_id"]
                 modified_srvprofile_id = srvprofile_id or onu["srvprofile_id"]
@@ -70,6 +73,7 @@ def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUE
                     "user_vlan": user_vlan or sp_info["user_vlan"]
                 } for sp_info in onu["service_ports"]]
                 save_path = authorization_commands
+                delete_path = delete_commands
 
             # Gerando comandos para autorizar a ONU
             commands = [
@@ -94,16 +98,16 @@ def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUE
                 save_path.append(command)
                 save_path.append("")  # Linha em branco após cada comando
 
-            # Gerando comandos para deletar a ONU e adicionar ao arquivo ontDelete.txt
-            delete_commands.extend([
+            # Gerando comandos para deletar a ONU e adicionar ao arquivo ontDelete.txt ou ontDeleteExcecao.txt
+            delete_path.extend([
                 f"\nundo service-port {sp_info['service_port_id']}" for sp_info in modified_service_ports
             ])
-            delete_commands.append("")  # Linha em branco após cada comando
-            delete_commands.append(f"interface gpon {interfaceGPON_antiga}")
-            delete_commands.append("")  # Linha em branco após cada comando
-            delete_commands.append(f"ont delete {gPON_antiga} {onu['ont_id']}")
-            delete_commands.append("")  # Linha em branco após cada comando
-            delete_commands.append(f"quit")
+            delete_path.append("")  # Linha em branco após cada comando
+            delete_path.append(f"interface gpon {interfaceGPON_antiga}")
+            delete_path.append("")  # Linha em branco após cada comando
+            delete_path.append(f"ont delete {gPON_antiga} {onu['ont_id']}")
+            delete_path.append("")  # Linha em branco após cada comando
+            delete_path.append(f"quit")
 
         # Salvando os comandos no arquivo principal
         if authorization_commands:
@@ -112,7 +116,7 @@ def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUE
         
         # Salvando os comandos no arquivo de exceção
         if exception_commands:
-            with open(autorizaONUExcecoo_path, 'w') as exception_file:
+            with open(autorizaONUExcecao_path, 'w') as exception_file:
                 exception_file.write("\n".join(exception_commands))
 
         # Salvando os comandos no arquivo ontDelete.txt
@@ -120,13 +124,19 @@ def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUE
             with open('src/ontDelete.txt', 'w') as delete_file:
                 delete_file.write("\n".join(delete_commands))
 
-        print(f"Comandos de autorização gerados e salvos em {autorizaONU_path} e {autorizaONUExcecoo_path}. Comandos de remoção salvos em 'src/ontDelete.txt'.")
+        # Salvando os comandos no arquivo ontDeleteExcecao.txt
+        if delete_Excecao_commands:
+            with open('ontDeleteExcecao.txt', 'w') as delete_Excecao_file:
+                delete_Excecao_file.write("\n".join(delete_Excecao_commands))
+
+        print(f"Comandos de autorização gerados e salvos em {autorizaONU_path} e {autorizaONUExcecao_path}. Comandos de remoção salvos em 'src/ontDelete.txt' e 'src/ontDeleteExcecao.txt'.")
     
     except Exception as e:
         print(f"Erro ao processar o arquivo JSON: {e}")
 
 # Caminhos dos arquivos
 autorizaONU_path = 'src/autorizaONU.txt'
-autorizaONUExcecoo_path = 'src/autorizaONUExcecoo.txt'
+autorizaONUExcecao_path = 'autorizaONUExcecao.txt'
 json_path = 'src/onus_config.json'
 autofind_onus_path = 'src/autofind_onus.json'
+
