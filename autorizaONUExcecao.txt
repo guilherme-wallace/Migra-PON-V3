@@ -1,17 +1,3 @@
 enable
 
 config
-
-interface gpon 0/1
-
-ont add 0 6 sn-auth "485754432CDFB3B5" omci ont-lineprofile-id 100 ont-srvprofile-id 100 desc "CORP-ITV-SL10-BANCADA-2"
-
-ont port native-vlan 0 6 eth 1 vlan 100 priority 0
-
-quit
-
-
-service-port vlan 100 gpon 0/1/0 ont 6 gemport 126 multi-service user-vlan 100 tag-transform translate
-
-
-service-port vlan 1900 gpon 0/1/0 ont 6 gemport 126 multi-service user-vlan 1900 tag-transform translate
