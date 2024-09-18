@@ -1,3 +1,5 @@
+#Script desenvolvido por Guilherme Wallace Souza Costa (https://github.com/guilherme-wallace)
+
 import paramiko
 import time
 import re
