@@ -47,7 +47,6 @@ ont_user_vlan = None
 hostnameOLTAntiga = olt_IPS.get(use_OLT_Antiga)
 hostnameOLTNova = olt_IPS.get(use_OLT_Nova)
 
-# Dados de acesso SSH
 username = user
 password = user_password
 

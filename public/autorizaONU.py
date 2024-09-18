@@ -121,7 +121,7 @@ def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUE
 
         # Salvando os comandos no arquivo ontDelete.txt
         if delete_commands:
-            with open('src/ontDelete.txt', 'w') as delete_file:
+            with open('ontDelete.txt', 'w') as delete_file:
                 delete_file.write("\n".join(delete_commands))
 
         # Salvando os comandos no arquivo ontDeleteExcecao.txt
@@ -135,7 +135,7 @@ def authorize_onus(json_path, autofind_onus_path, autorizaONU_path, autorizaONUE
         print(f"Erro ao processar o arquivo JSON: {e}")
 
 # Caminhos dos arquivos
-autorizaONU_path = 'src/autorizaONU.txt'
+autorizaONU_path = 'autorizaONU.txt'
 autorizaONUExcecao_path = 'autorizaONUExcecao.txt'
 json_path = 'src/onus_config.json'
 autofind_onus_path = 'src/autofind_onus.json'
