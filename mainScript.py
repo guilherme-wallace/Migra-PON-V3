@@ -66,6 +66,6 @@ def main():
                    native_vlan=ont_native_vlan, service_port_id=None, vlan=ont_vlan_service_port, gemport=ont_gem_PORT, user_vlan=ont_user_vlan)
     
     # Executando a função que acessa as OLTs e autoriza as ONUs com novos dados.
-    execute_olt_commands_autorizaOLT(hostnameOLTAntiga, hostnameOLTNova, username, password)
+    #execute_olt_commands_autorizaOLT(hostnameOLTAntiga, hostnameOLTNova, username, password)
 
 main()
