@@ -17,6 +17,7 @@ from public.autorizaOLT import *
 olt_IPS = {
     "OLT-SEA01": ip_SEA01,
     "OLT-SEA03": ip_SEA03,
+    "OLT-SEA04": ip_SEA04,
     "OLT-VTA01": ip_VTA01,
     "OLT-VTA02": ip_VTA02,
     "OLT-VVA01": ip_VVA01,
@@ -24,21 +25,21 @@ olt_IPS = {
     "OLT-CCA01": ip_CCA01,
 }
 #------------------------------------------------------------------------------------------------------------
-#OBS: 1º adicione as ONUS que serão autorizadas, pelo comando display ont autofind all 
-
-# Seleciona a OLT Antiga
+# Selecione a OLT Antiga
 use_OLT_Antiga = "OLT-SEA01"
 pon_ANTIGA = "0/16/5"
 
-# Seleciona a OLT Nova
+# Selecione a OLT Nova
 use_OLT_Nova = "OLT-SEA01"
 
-# Verifique as configurações da ONU
+# Verifique as configurações das ONUs
+# Deixew como None as configurações que não serão alteradas.
+
 onu_ID = 0
 ont_LIN_PROF = None
 ont_SRV_PROF = None
 ont_native_vlan = None
-ont_vlan_service_port = 1904
+ont_vlan_service_port = None
 ont_gem_PORT = None
 ont_user_vlan = None
 
