@@ -27,19 +27,19 @@ olt_IPS = {
 #------------------------------------------------------------------------------------------------------------
 # Selecione a OLT Antiga
 use_OLT_Antiga = "OLT-SEA01"
-pon_ANTIGA = "0/16/5"
+pon_ANTIGA = "0/5/0"
 
 # Selecione a OLT Nova
-use_OLT_Nova = "OLT-SEA01"
+use_OLT_Nova = "OLT-SEA04"
 
 # Verifique as configurações das ONUs
 # Deixew como None as configurações que não serão alteradas.
 
 onu_ID = 0
-ont_LIN_PROF = None
-ont_SRV_PROF = None
+ont_LIN_PROF = 1406
+ont_SRV_PROF = 1406
 ont_native_vlan = None
-ont_vlan_service_port = None
+ont_vlan_service_port = 1406
 ont_gem_PORT = None
 ont_user_vlan = None
 
