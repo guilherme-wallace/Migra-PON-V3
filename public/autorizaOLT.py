@@ -42,11 +42,9 @@ def ssh_connect_and_execute_commands(hostname, username, password, commands, del
         client.close()
 
 def execute_olt_commands_autorizaOLT(hostnameOLTAntiga, hostnameOLTNova, username, password):
-    # Diretórios e arquivos
     delete_commands_file = 'src/ontDelete.txt'
     authorize_commands_file = 'src/autorizaONU.txt'
 
-    # Leitura dos comandos de remoção
     if os.path.exists(delete_commands_file):
         with open(delete_commands_file, 'r') as file:
             delete_commands = file.read().splitlines()
@@ -54,7 +52,6 @@ def execute_olt_commands_autorizaOLT(hostnameOLTAntiga, hostnameOLTNova, usernam
         print(f"Arquivo {delete_commands_file} não encontrado.")
         return
 
-    # Leitura dos comandos de autorização
     if os.path.exists(authorize_commands_file):
         with open(authorize_commands_file, 'r') as file:
             authorize_commands = file.read().splitlines()
@@ -62,11 +59,9 @@ def execute_olt_commands_autorizaOLT(hostnameOLTAntiga, hostnameOLTNova, usernam
         print(f"Arquivo {authorize_commands_file} não encontrado.")
         return
 
-    # Executando comandos na OLT antiga
     print(f"Executando comandos na OLT antiga: {hostnameOLTAntiga}")
     ssh_connect_and_execute_commands(hostnameOLTAntiga, username, password, delete_commands, delay=0.2, timeout=4, max_loops=6)
 
-    # Executando comandos na OLT nova
     print(f"Executando comandos na OLT nova: {hostnameOLTNova}")
     ssh_connect_and_execute_commands(hostnameOLTNova, username, password, authorize_commands, delay=0.2, timeout=4, max_loops=6)
 

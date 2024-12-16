@@ -42,23 +42,19 @@ def ssh_connect_and_execute_currentPort(hostnameOLTAntiga, username, password, p
             full_currentPort += output
             #print(full_currentPort)
 
-        # Filtra as linhas desejadas usando expressões regulares
         gpon_section = re.findall(r'\[gpon\][\s\S]*?#', full_currentPort)
         bbs_config_section = re.findall(r'\[bbs-config\][\s\S]*?#', full_currentPort)
 
         filtered_currentPort = gpon_section + bbs_config_section
 
-        # Diretório de saída
         output_dir = 'src'
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
-        # Salvando a saída completa em um arquivo
         full_currentPort_txt = os.path.join(output_dir, 'full_currentPort.txt')
         with open(full_currentPort_txt, 'w') as file:
             file.write(full_currentPort)
 
-        # Salvando as seções filtradas
         filtered_currentPort_txt = os.path.join(output_dir, 'filtered_currentPort.txt')
         with open(filtered_currentPort_txt, 'w') as file:
             file.write('\n'.join(filtered_currentPort))

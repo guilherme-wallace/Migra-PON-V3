@@ -42,18 +42,14 @@ def ssh_connect_and_execute_autofind(hostnameOLTNova, username, password, delay=
 
             full_output += output
 
-        # Filtra as informações relevantes usando expressões regulares
         matches = re.findall(r'F/S/P\s+:\s+(\d+/\d+/\d+).*?Ont SN\s+:\s+(\w+).*?Ont EquipmentID\s+:\s+(\w+)', full_output, re.DOTALL)
 
-        # Estrutura os dados em formato de dicionário para salvar em JSON
         onus = [{"F/S/P": match[0], "Ont SN": match[1], "Ont EquipmentID": match[2]} for match in matches]
 
-        # Diretório de saída
         output_dir = 'src'
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
-        # Salvando as informações em um arquivo JSON
         json_path = os.path.join(output_dir, 'autofind_onus.json')
         with open(json_path, 'w') as json_file:
             json.dump(onus, json_file, indent=4)
