@@ -10,3 +10,4 @@ autorizaONUExcecao.txt
 /public/__pycache__
 autorizaONU.txt
 ontDelete.txt
+*.log
